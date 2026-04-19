@@ -5,3 +5,6 @@
 dify自定义插件，schema文件配置，接口与py文件内一致，测试通过即可
 导入DSL文件，进行LLM基础配置后即可开始测试！
 需要传入的参数是bid，也可说明所需数据样本的数量
+<img width="500" height="400" alt="image" src="https://github.com/user-attachments/assets/0bab30d1-e739-4410-863f-13a75d06ebad" />
+<img width="1200" height="550" alt="image" src="https://github.com/user-attachments/assets/9bc503df-7341-4fba-bdce-3311ec932846" />
+
