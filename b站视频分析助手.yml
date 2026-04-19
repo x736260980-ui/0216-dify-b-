@@ -1,0 +1,155 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: agent-chat
+  name: b站视频分析助手
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.1.34@a3a90f3034b884bb215b8770af24ecd6145cfd5b6ab97f9e40c3143cbe3ccd34
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/echarts:0.0.2@a050ea4a1eb5b1890070a65be70a315e10ce4576cadec738e678a3924c3ae6b7
+    version: null
+kind: app
+model_config:
+  agent_mode:
+    enabled: true
+    max_iteration: 10
+    prompt: null
+    strategy: function_call
+    tools:
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/echarts/echarts
+      provider_name: langgenius/echarts/echarts
+      provider_type: builtin
+      tool_label: 饼图
+      tool_name: pie_chart
+      tool_parameters:
+        categories: null
+        data: null
+        title: null
+    - enabled: true
+      notAuthor: false
+      provider_id: 79488825-b77f-45f8-a370-761a8dc68d1e
+      provider_name: b站视频分析工具整合包
+      provider_type: api
+      tool_label: get_video_meta
+      tool_name: get_video_meta
+      tool_parameters:
+        bvid: null
+    - enabled: true
+      notAuthor: false
+      provider_id: 79488825-b77f-45f8-a370-761a8dc68d1e
+      provider_name: b站视频分析工具整合包
+      provider_type: api
+      tool_label: get_video_danmaku
+      tool_name: get_video_danmaku
+      tool_parameters:
+        bvid: null
+    - enabled: true
+      notAuthor: false
+      provider_id: 79488825-b77f-45f8-a370-761a8dc68d1e
+      provider_name: b站视频分析工具整合包
+      provider_type: api
+      tool_label: get_video_comments
+      tool_name: get_video_comments
+      tool_parameters:
+        bvid: null
+        max_pages: null
+  annotation_reply:
+    enabled: false
+  chat_prompt_config:
+    prompt:
+    - role: system
+      text: ''
+  completion_prompt_config:
+    conversation_histories_role:
+      assistant_prefix: ''
+      user_prefix: ''
+    prompt:
+      text: ''
+  dataset_configs:
+    datasets:
+      datasets: []
+    retrieval_model: multiple
+    top_k: 4
+  dataset_query_variable: ''
+  external_data_tools: []
+  file_upload:
+    allowed_file_extensions:
+    - .JPG
+    - .JPEG
+    - .PNG
+    - .GIF
+    - .WEBP
+    - .SVG
+    - .MP4
+    - .MOV
+    - .MPEG
+    - .WEBM
+    allowed_file_types: []
+    allowed_file_upload_methods:
+    - remote_url
+    - local_file
+    enabled: false
+    image:
+      detail: high
+      enabled: false
+      number_limits: 3
+      transfer_methods:
+      - remote_url
+      - local_file
+    number_limits: 3
+  model:
+    completion_params:
+      stop: []
+    mode: chat
+    name: qwen3-max
+    provider: langgenius/tongyi/tongyi
+  more_like_this:
+    enabled: false
+  opening_statement: ''
+  pre_prompt: "# 角色设定\n你是一位拥有顶级投行与互联网大厂背景的“B站生态与舆情商业分析专家”。你具备极强的数据洞察力，能够从海量杂乱的弹幕、评论和基础数据中，精准提炼出用户痛点、情绪极性与商业价值。\n\
+    \n# 工具使用规则\n你当前配备了三个核心数据工具：\n1. `get_video_meta`: 获取视频的基础热度指标（播放量、点赞数等），用于判断数据底盘。\n\
+    2. `get_video_danmaku`: 抓取视频实时弹幕。根据用户需求，自主设定 `max_limit` 参数控制弹幕样本抽取量（常规分析推荐 200-500\
+    \ 条）。\n3. `get_video_comments`: 深挖视频评论数据。根据用户需求，自主设定 `max_pages` 参数控制向下挖掘的页数（常规分析推荐\
+    \ 3-5 页）。\n\n# 核心工作流\n当前用户锁定的目标视频 BV 号为：{{bid}}\n收到指令后，你必须严格遵循以下链路思考与执行：\n1. **动态调度**：根据问题深度，自主决定调用工具的顺序，并为弹幕和评论分配合理的抓取上限参数。\n\
+    2. **交叉验证**：将 meta 的热度、danmaku 的瞬时情绪、comments 的长文本逻辑进行比对，剔除无效噪音。\n3. **图表构建**：计算出正面、负面、中立情绪的具体数量与占比后，按下方协议自行构建\
+    \ JSON 数据，唤起前端图表渲染。\n\n# 输出规范\n请以专业、冷静且客观的口吻输出分析报告。你的回答必须包含以下结构：\n- **\U0001F4CA\
+    \ 核心数据盘点**：简述互动数据，评估热度量级。\n- **\U0001F3AD 观众情绪画像**：明确提炼情绪倾向，并必须列出（正面/负面/中立）的具体数量及占比。每种观点选出最具代表性的一条评论内容输出\n\
+    - **\U0001F4A1 情绪分布图表**：调用 Echarts 工具，渲染上述情绪数据的饼状图。\n- **\U0001F3AF 深度洞察与痛点**：归纳\
+    \ 3 个讨论最集中的核心观点，并精准引用一两句极具代表性的原声评论作为证据。\n- **\U0001F9E0 分析师观点**：直接输出你的判断与商业改进建议，拒绝模棱两可。\n\
+    \n【严格图表渲染协议】（最高优先级，禁止任何偏差）\n当你需要展示图表时，必须且只能使用以下格式，将合法的 JSON 数据完整地包裹起来输出给用户：\n\
+    ```echarts\n{\n  \"title\": { \"text\": \"观众情绪分布图\" },\n  \"series\": [ ... ]\n\
+    }"
+  prompt_type: simple
+  retriever_resource:
+    enabled: true
+  sensitive_word_avoidance:
+    configs: []
+    enabled: false
+    type: ''
+  speech_to_text:
+    enabled: false
+  suggested_questions: []
+  suggested_questions_after_answer:
+    enabled: false
+  text_to_speech:
+    enabled: false
+    language: ''
+    voice: ''
+  user_input_form:
+  - text-input:
+      default: ''
+      label: bid
+      required: true
+      variable: bid
+version: 0.5.0
